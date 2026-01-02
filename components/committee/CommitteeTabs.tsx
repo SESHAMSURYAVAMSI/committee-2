@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { CommitteeMember } from "@/types/committee";
 import CommitteeGrid from "./CommitteeGrid";
+import MemberCard from "./MemberCard";
 
 type Props = {
   categories: string[];
@@ -10,15 +11,13 @@ type Props = {
 };
 
 export default function CommitteeTabs({ categories, data }: Props) {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory] = useState(categories[0]);
   const [selectedDesignation, setSelectedDesignation] = useState("ALL");
 
-  /* members of active category */
   const categoryMembers = useMemo(() => {
     return data.filter(m => m.category === activeCategory);
   }, [data, activeCategory]);
 
-  /* unique designations */
   const designations = useMemo(() => {
     const set = new Set(
       categoryMembers.map(m => m.designation).filter(Boolean)
@@ -26,7 +25,6 @@ export default function CommitteeTabs({ categories, data }: Props) {
     return ["ALL", ...Array.from(set)];
   }, [categoryMembers]);
 
-  /* members to show */
   const membersToShow =
     selectedDesignation === "ALL"
       ? categoryMembers
@@ -35,32 +33,35 @@ export default function CommitteeTabs({ categories, data }: Props) {
         );
 
   return (
-  <div className="space-y-4">
+    <div className="space-y-6">
+      {/* CATEGORY HEADER */}
+      <CommitteeGrid title={activeCategory} />
 
-    {/* FILTER BAR — DIRECTLY BELOW TABS */}
-    <div className="flex items-center gap-3">
-      <label className="text-sm font-medium text-gray-800">
-        Designation:
-      </label>
+      {/* FILTER — NOW VISIBLE */}
+      <div className="flex items-center gap-1">
+        <label className="text-sm font-medium text-gray-800">
+          Designation:
+        </label>
 
-      <select
-        value={selectedDesignation}
-        onChange={e => setSelectedDesignation(e.target.value)}
-        className="rounded-md border py-1 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
-      >
-        {designations.map(d => (
-          <option key={d} value={d}>
-            {d === "ALL" ? "All Designations" : d}
-          </option>
+        <select
+          value={selectedDesignation}
+          onChange={e => setSelectedDesignation(e.target.value)}
+          className="rounded-md border py-1 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+        >
+          {designations.map(d => (
+            <option key={d} value={d}>
+              {d === "ALL" ? "All Designations" : d}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* MEMBERS LIST */}
+      <div className="flex flex-col gap-3">
+        {membersToShow.map((m, i) => (
+          <MemberCard key={i} {...m} />
         ))}
-      </select>
+      </div>
     </div>
-
-    {/* MEMBERS LIST */}
-    <CommitteeGrid
-      title={activeCategory}
-      members={membersToShow}
-    />
-  </div>
-);
+  );
 }
