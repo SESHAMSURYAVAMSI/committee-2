@@ -66,7 +66,7 @@ export default function CommitteeTabs({ categories, data }: Props) {
         <select
           value={selectedDesignation}
           onChange={e => setSelectedDesignation(e.target.value)}
-          className="rounded-md border px-1 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
+          className="rounded-md border  py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
         >
           {designations.map(d => (
             <option key={d} value={d}>
