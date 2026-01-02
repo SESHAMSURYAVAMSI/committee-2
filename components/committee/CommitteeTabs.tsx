@@ -35,52 +35,32 @@ export default function CommitteeTabs({ categories, data }: Props) {
         );
 
   return (
-    <div className="space-y-6">
-      {/* CATEGORY TABS */}
-      <div className="flex flex-wrap gap-3 border-b pb-4">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => {
-              setActiveCategory(cat);
-              setSelectedDesignation("ALL");
-            }}
-            className={`rounded-full px-5 py-2 text-sm font-semibold transition
-              ${
-                activeCategory === cat
-                  ? "bg-orange-500 text-white shadow"
-                  : "bg-gray-100 text-gray-700 hover:bg-orange-50 hover:text-orange-600"
-              }`}
-          >
-            {cat}
-          </button>
+  <div className="space-y-4">
+
+    {/* FILTER BAR — DIRECTLY BELOW TABS */}
+    <div className="flex items-center gap-3">
+      <label className="text-sm font-medium text-gray-800">
+        Designation:
+      </label>
+
+      <select
+        value={selectedDesignation}
+        onChange={e => setSelectedDesignation(e.target.value)}
+        className="rounded-md border px-3 py-2 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+      >
+        {designations.map(d => (
+          <option key={d} value={d}>
+            {d === "ALL" ? "All Designations" : d}
+          </option>
         ))}
-      </div>
-
-      {/* FILTER BAR (BEST PLACE) */}
-      <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-gray-800">
-          Designation:
-        </label>
-
-        <select
-          value={selectedDesignation}
-          onChange={e => setSelectedDesignation(e.target.value)}
-          className="rounded-md border  py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-black"
-        >
-          {designations.map(d => (
-            <option key={d} value={d}>
-              {d === "ALL" ? "All Designations" : d}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* MEMBERS LIST */}
-      <CommitteeGrid
-        title={activeCategory}
-        members={membersToShow}
-      />
+      </select>
     </div>
-  );
+
+    {/* MEMBERS LIST */}
+    <CommitteeGrid
+      title={activeCategory}
+      members={membersToShow}
+    />
+  </div>
+);
 }
