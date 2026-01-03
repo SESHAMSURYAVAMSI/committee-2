@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import Image from "next/image";
 import { CommitteeMember } from "@/types/committee";
 import CommitteeTabs from "@/components/committee/CommitteeTabs";
 
@@ -8,9 +7,9 @@ type CSVRow = {
   name?: string;
   designation?: string;
   category?: string;
+  subcategory?: string;
   image?: string;
 };
-
 
 async function getCommitteeData(): Promise<CommitteeMember[]> {
   const filePath = path.join(
@@ -32,7 +31,7 @@ async function getCommitteeData(): Promise<CommitteeMember[]> {
 
   return lines.slice(1).map(line => {
     const values = line.split(",").map(v => v.trim());
-    const record: CSVRow  = {};
+    const record: CSVRow = {};
 
     headers.forEach((h, i) => {
       record[h as keyof CSVRow] = values[i] || "";
@@ -42,6 +41,7 @@ async function getCommitteeData(): Promise<CommitteeMember[]> {
       name: record.name || "",
       designation: record.designation || "",
       category: record.category || "Uncategorized",
+      subcategory: record.subcategory || "", // ✅ FIXED
       image: record.image || "",
     };
   });
@@ -56,9 +56,6 @@ export default async function CommitteePage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-
-
-      {/* TABS */}
       <div className="max-w-7xl mx-auto px-6 py-10">
         <CommitteeTabs
           categories={categories}

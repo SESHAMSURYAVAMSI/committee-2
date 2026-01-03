@@ -12,24 +12,27 @@ type Props = {
 
 export default function CommitteeTabs({ categories, data }: Props) {
   const [activeCategory] = useState(categories[0]);
-  const [selectedDesignation, setSelectedDesignation] = useState("ALL");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("ALL");
 
+  /* members of active category */
   const categoryMembers = useMemo(() => {
     return data.filter(m => m.category === activeCategory);
   }, [data, activeCategory]);
 
-  const designations = useMemo(() => {
+  /* unique subcategories */
+  const subcategories = useMemo(() => {
     const set = new Set(
-      categoryMembers.map(m => m.designation).filter(Boolean)
+      categoryMembers.map(m => m.subcategory).filter(Boolean)
     );
     return ["ALL", ...Array.from(set)];
   }, [categoryMembers]);
 
+  /* members to show */
   const membersToShow =
-    selectedDesignation === "ALL"
+    selectedSubcategory === "ALL"
       ? categoryMembers
       : categoryMembers.filter(
-          m => m.designation === selectedDesignation
+          m => m.subcategory === selectedSubcategory
         );
 
   return (
@@ -37,20 +40,20 @@ export default function CommitteeTabs({ categories, data }: Props) {
       {/* CATEGORY HEADER */}
       <CommitteeGrid title={activeCategory} />
 
-      {/* FILTER — NOW VISIBLE */}
-      <div className="flex items-center gap-1">
+      {/* SUBCATEGORY FILTER */}
+      <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-800">
-          Designation:
+          Subcategory:
         </label>
 
         <select
-          value={selectedDesignation}
-          onChange={e => setSelectedDesignation(e.target.value)}
-          className="rounded-md border py-1 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+          value={selectedSubcategory}
+          onChange={e => setSelectedSubcategory(e.target.value)}
+          className="rounded-md border py-1 px-2 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
         >
-          {designations.map(d => (
-            <option key={d} value={d}>
-              {d === "ALL" ? "All Designations" : d}
+          {subcategories.map(sc => (
+            <option key={sc} value={sc}>
+              {sc === "ALL" ? "All Subcategories" : sc}
             </option>
           ))}
         </select>
