@@ -49,7 +49,7 @@ export default function CommitteeTabs({ categories, data }: Props) {
         <select
           value={selectedSubcategory}
           onChange={e => setSelectedSubcategory(e.target.value)}
-          className="rounded-md border py-1 px-2 text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="rounded-md border py-1 px-2 w-full text-sm bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
         >
           {subcategories.map(sc => (
             <option key={sc} value={sc}>
